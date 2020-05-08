@@ -1,0 +1,203 @@
+@prefix : <http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2> .
+
+<http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#acceuileCours
+:acceuileCours rdf:type owl:ObjectProperty ;
+               owl:inverseOf :coursDans .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#coursDans
+:coursDans rdf:type owl:ObjectProperty .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#enseigner
+:enseigner rdf:type owl:ObjectProperty ;
+           rdfs:domain :Personne ;
+           rdfs:range :Modules .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#modulesAdesCourrs
+:modulesAdesCourrs rdf:type owl:ObjectProperty ;
+                   rdfs:domain :Modules ;
+                   rdfs:range :Cours .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#suivre
+:suivre rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf owl:topObjectProperty ;
+        rdfs:domain :Etudiants ;
+        rdfs:range :Modules .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Cour_Magistrale
+:Cour_Magistrale rdf:type owl:Class ;
+                 rdfs:subClassOf :Cours .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Cours
+:Cours rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Enseignant_Info
+:Enseignant_Info rdf:type owl:Class ;
+                 owl:equivalentClass [ owl:intersectionOf ( :Personne
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty :enseigner ;
+                                                              owl:someValuesFrom :Module_Info
+                                                            ]
+                                                          ) ;
+                                       rdf:type owl:Class
+                                     ] ;
+                 rdfs:subClassOf :Enseignants .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Enseignant_Math
+:Enseignant_Math rdf:type owl:Class ;
+                 owl:equivalentClass [ owl:intersectionOf ( :Personne
+                                                            [ rdf:type owl:Restriction ;
+                                                              owl:onProperty :enseigner ;
+                                                              owl:someValuesFrom :Module_Math
+                                                            ]
+                                                          ) ;
+                                       rdf:type owl:Class
+                                     ] ;
+                 rdfs:subClassOf :Enseignants .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Enseignant_RO
+:Enseignant_RO rdf:type owl:Class ;
+               owl:equivalentClass [ owl:intersectionOf ( :Enseignant_Info
+                                                          :Enseignant_Math
+                                                        ) ;
+                                     rdf:type owl:Class
+                                   ] ;
+               rdfs:subClassOf :Enseignants .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Enseignants
+:Enseignants rdf:type owl:Class ;
+             owl:equivalentClass [ owl:intersectionOf ( :Personne
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :enseigner ;
+                                                          owl:someValuesFrom :Modules
+                                                        ]
+                                                      ) ;
+                                   rdf:type owl:Class
+                                 ] ;
+             rdfs:subClassOf :Personne .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Etudiants
+:Etudiants rdf:type owl:Class ;
+           rdfs:subClassOf :Personne ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty :suivre ;
+                             owl:someValuesFrom :Modules
+                           ] .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Locaux
+:Locaux rdf:type owl:Class ;
+        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                          owl:onProperty :acceuileCours ;
+                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                          owl:onClass :Cours
+                        ] .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Module_Info
+:Module_Info rdf:type owl:Class ;
+             rdfs:subClassOf :Modules .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Module_Math
+:Module_Math rdf:type owl:Class ;
+             rdfs:subClassOf :Modules .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Modules
+:Modules rdf:type owl:Class ;
+         rdfs:subClassOf [ rdf:type owl:Restriction ;
+                           owl:onProperty :modulesAdesCourrs ;
+                           owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                           owl:onClass :Cours
+                         ] .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Personne
+:Personne rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Salle_Conference
+:Salle_Conference rdf:type owl:Class ;
+                  owl:equivalentClass [ owl:intersectionOf ( :Locaux
+                                                             [ rdf:type owl:Restriction ;
+                                                               owl:onProperty :acceuileCours ;
+                                                               owl:allValuesFrom :Cour_Magistrale
+                                                             ]
+                                                           ) ;
+                                        rdf:type owl:Class
+                                      ] ;
+                  rdfs:subClassOf :Locaux .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Travaux_Dirirges
+:Travaux_Dirirges rdf:type owl:Class ;
+                  rdfs:subClassOf :Cours .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Cours_Analyse
+:Cours_Analyse rdf:type owl:NamedIndividual ,
+                        :Cour_Magistrale .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Cours_Ananum
+:Cours_Ananum rdf:type owl:NamedIndividual ,
+                       :Cour_Magistrale .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Module_Analyse
+:Module_Analyse rdf:type owl:NamedIndividual ,
+                         :Module_Math ;
+                :modulesAdesCourrs :Cours_Analyse .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Module_Ananum
+:Module_Ananum rdf:type owl:NamedIndividual ,
+                        :Module_Info ;
+               :modulesAdesCourrs :Cours_Ananum .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Mr_Touzaline
+:Mr_Touzaline rdf:type owl:NamedIndividual ,
+                       :Personne ;
+              :enseigner :Cours_Analyse ,
+                         :Cours_Ananum .
+
+
+###  http://www.semanticweb.org/ouagu/ontologies/2020/3/untitled-ontology-2#Salle_135
+:Salle_135 rdf:type owl:NamedIndividual ,
+                    :Locaux ;
+           :acceuileCours :Cours_Analyse .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
